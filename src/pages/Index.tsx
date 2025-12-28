@@ -1,13 +1,51 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import LoginForm from "@/components/LoginForm";
+import AdminLogin from "@/components/AdminLogin";
+import SearchPortal from "@/components/SearchPortal";
+import AdminPanel from "@/components/AdminPanel";
+import { LoginKey } from "@/lib/database";
+
+type ViewState = "login" | "admin-login" | "portal" | "admin-panel";
 
 const Index = () => {
+  const [view, setView] = useState<ViewState>("login");
+  const [userKey, setUserKey] = useState<LoginKey | null>(null);
+
+  const handleUserLogin = (key: LoginKey) => {
+    setUserKey(key);
+    setView("portal");
+  };
+
+  const handleAdminLogin = () => {
+    setView("admin-panel");
+  };
+
+  const handleLogout = () => {
+    setUserKey(null);
+    setView("login");
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <>
+      {view === "login" && (
+        <LoginForm
+          onLogin={handleUserLogin}
+          onAdminClick={() => setView("admin-login")}
+        />
+      )}
+      {view === "admin-login" && (
+        <AdminLogin
+          onLogin={handleAdminLogin}
+          onBack={() => setView("login")}
+        />
+      )}
+      {view === "portal" && userKey && (
+        <SearchPortal userKey={userKey} onLogout={handleLogout} />
+      )}
+      {view === "admin-panel" && (
+        <AdminPanel onLogout={handleLogout} />
+      )}
+    </>
   );
 };
 
