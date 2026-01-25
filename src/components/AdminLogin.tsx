@@ -8,7 +8,7 @@ interface AdminLoginProps {
   onBack: () => void;
 }
 
-const ADMIN_PASSWORD = "Cfms@7890";
+const ADMIN_PASSWORD = "Victory@2026";
 
 const AdminLogin = ({ onLogin, onBack }: AdminLoginProps) => {
   const [password, setPassword] = useState("");
